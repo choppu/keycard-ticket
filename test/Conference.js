@@ -11,9 +11,9 @@ describe("Conference contract", () => {
   let keycardAddress = "0x57139B20c66AaaC8e0Cc93d448D6BeBF4f53b58D";
   let attendanceDataType;
 
-  function keycardSign(message) {
+  function keycardSign(message, key) {
     const obj = Object.assign({ message: message }, attendanceDataType);
-    return ethSigUtil.signTypedData(Buffer.from(keycardPrivate, "hex"), { data: obj });
+    return ethSigUtil.signTypedData(Buffer.from(key, "hex"), { data: obj });
   }
 
   before(async () =>{
@@ -65,9 +65,35 @@ describe("Conference contract", () => {
       conference: conference.address
     }
     
-    await expect(conference.attend(attendance, keycardSign(attendance))).to.emit(conference, "Attended").withArgs(keycardAddress);
+    await expect(conference.attend(attendance, keycardSign(attendance, keycardPrivate))).to.emit(conference, "Attended").withArgs(keycardAddress);
 
     let ticket = await conference.tickets(keycardAddress);
     expect(ticket.attended).to.equal(true);
+  });
+
+  it("Ticket not found", async () => {
+    let attendance = {
+      conference: conference.address
+    }
+
+    let wrongKeycardKey = "ac76d50cc6e6c020fad1f99dec1f7379564cd29a890cf0ce3fefacc2b4dc34c3";
+
+    await expect(conference.attend(attendance, keycardSign(attendance, wrongKeycardKey))).to.be.revertedWith("Ticket not found");
+  });
+
+  it("Wrong conference", async () => {
+    let attendance = {
+      conference: keycardAddress
+    }
+
+    await expect(conference.attend(attendance, keycardSign(attendance, keycardPrivate))).to.be.revertedWith("Wrong conference");
+  });
+
+  it("Conference attended", async () => {
+    let attendance = {
+      conference: conference.address
+    }
+
+    await expect(conference.attend(attendance, keycardSign(attendance, keycardPrivate))).to.be.revertedWith("Attendance already registered");
   });
 });
