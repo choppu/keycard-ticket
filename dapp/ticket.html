@@ -7,7 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
 </head>
 <body id="participate-page">
-<p>Hello World</p>
+<img  alt="Ticket" id="create-ticket-image" class="kt__image">
+<div class="kt__text-container">
+  <h1 class="kt__heading" id="conference-name"></h1>
+  <input type="text" id="conference-address" class="kt__input kt_ticket-input" placeholder="Conference Address" required>
+  <input type="text" id="attendee-address" class="kt__input kt_ticket-input" placeholder="Attendee Address" required>
+  <div class="kt__buttons-container">
+    <button type="submit" id="participate-sign" class="kt__btn  kt__btn-small">Get Keycard Address</button>
+    <button type="submit" id="conference-participate" class="kt__btn kt__btn-small" disabled="disabled">Participate</button>
+  </div>
 </div>
 </body>
 </html>
