@@ -10,6 +10,7 @@ describe("Conference contract", () => {
   let keycardPrivate = "bc76d50cc6e6c020fad1f99dec1f7379564cd29a890cf0ce3fefacc2b4dc34c3";
   let keycardAddress = "0x57139B20c66AaaC8e0Cc93d448D6BeBF4f53b58D";
   let attendanceDataType;
+  let desc = "Conference 1";
 
   function keycardSign(message, key) {
     const obj = Object.assign({ message: message }, attendanceDataType);
@@ -20,7 +21,7 @@ describe("Conference contract", () => {
     const Conference = await ethers.getContractFactory("Conference");
     [owner, attendee, ...addrs] = await ethers.getSigners();
     attendeeAddress = await attendee.getAddress();
-    conference = await Conference.deploy();
+    conference = await Conference.deploy(desc);
     await conference.deployed();
 
     attendanceDataType = {
@@ -43,6 +44,10 @@ describe("Conference contract", () => {
         verifyingContract: conference.address
       }
     };
+  });
+
+  it("Correct description", async () => {
+    expect(await conference.description()).to.equal(desc);
   });
 
   it("Create Ticket", async () => {

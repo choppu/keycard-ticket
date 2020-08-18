@@ -2,10 +2,20 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Keycard Ticket</title>
+  <title>Keycard Ticket | Conference</title>
   <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
 </head>
-<body>
-<p>Hello world</p>
+<body id="create-contract-page">
+<img id="create-conference-image" class="kt__image" alt="Conference Img">
+<div class="kt__text-container">
+  <h1 class="kt__heading">Create new conference</h1>
+  <input type="text" id="contract-description" class="kt__input" placeholder="Description" required>
+  <button type="submit" disabled="disabled" id="contract-create" class="kt__btn">Create</button>
+</div>
+<div class="kt__conference-created-container kt__display-none" id="conference-success">
+  <span id="success-message" class="kt__conference-created-el"></span>
+  <span id="conference-address" class="kt__conference-created-el"></span>
+</div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: './dapp/index.ts',
@@ -13,6 +14,17 @@ module.exports = {
       { 
         test: /\.css$/, 
         use: ['style-loader', 'css-loader'] 
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+            }
+          },
+        ],
       }
     ],
   },
@@ -28,8 +40,14 @@ module.exports = {
     port: 9000
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
+      filename: 'index.html',
       template: 'dapp/index.html'
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'ticket.html',
+      template: 'dapp/ticket.html'
     })
   ]  
 };

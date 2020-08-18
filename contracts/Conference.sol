@@ -2,6 +2,8 @@
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 
+import "@nomiclabs/buidler/console.sol";
+
 contract Conference {
   event Attended(address attendee);
 
@@ -19,13 +21,18 @@ contract Conference {
   bytes32 DOMAIN_SEPARATOR;
 
   mapping(address => Ticket) public tickets;
+  string public description;
 
-  constructor() public {
+  constructor(string memory _description) public {
     uint256 chainID;
 
     assembly {
       chainID := chainid()
     }
+
+    description = _description;
+
+    console.log(description);
 
     DOMAIN_SEPARATOR = keccak256(abi.encode(
       EIP712DOMAIN_TYPEHASH,
