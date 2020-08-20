@@ -33,6 +33,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "@swyftx/api-crypto-address-validator": "^1.13.1",
     "eth-sig-util": "^2.5.3",
     "ethers": "^5.0.8",
     "lodash": "^4.17.20"

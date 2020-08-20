@@ -49,6 +49,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'ticket.html',
       template: 'dapp/ticket.html'
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'attend.html',
+      template: 'dapp/attend.html'
     })
   ]  
 };

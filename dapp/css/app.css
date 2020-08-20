@@ -71,20 +71,21 @@ input[disabled="disabled"], input[disabled="disabled"]:hover {
 
 .kt__text-container {
   width: 80%;
-  margin: 5em auto 4em auto;
+  margin: 4em auto;
 }
 
 .kt__heading {
-  font-size: 1.3em;
+  font-size: 1.2em;
   text-align: center;
   text-transform: uppercase;
+  line-height: 1.5em;
 }
 
 .kt__input {
   width: 100%;
   border: none;
   border-bottom: 2px solid rgb(55, 55, 55);
-  margin: 4em 0;
+  margin: 2em 0;
   font-family: 'Alata', sans-serif;
   outline: none;
   height: 28px;
@@ -97,7 +98,7 @@ input[disabled="disabled"], input[disabled="disabled"]:hover {
 
 .kt__btn {
   width: 80%;
-  margin: 1em auto;
+  margin: 1.5em auto;
   display: block;
   font-size: .85em;
   text-transform: uppercase;
@@ -108,12 +109,6 @@ input[disabled="disabled"], input[disabled="disabled"]:hover {
   box-shadow: 0 14px 28px rgba(180, 180, 180,0.15), 0 10px 10px rgba(180, 180, 180,0.12);
   background: rgb(201, 114, 134);
   color: white;
-}
-
-.kt__btn-small {
-  display: inline-block;
-  width: 42%;
-  margin: 1em;
 }
 
 .kt__buttons-container {
@@ -151,4 +146,19 @@ input[disabled="disabled"], input[disabled="disabled"]:hover {
 .kt__conference-name {
   display: block;
   padding: 1em 0;
+}
+
+.kt__success-message-container {
+  font-size: .8em;
+  margin-top: 1em auto 0 auto;
+  text-align: center;
+  line-height: 1.5em;
+  box-sizing: border-box;
+  width: 95%;
+}
+
+.kt__success-message-link {
+  color: rgb(201, 114, 134);
+  display: block;
+  width: 100%;
 }
