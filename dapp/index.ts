@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import "./css/app.css";
 
 const conferenceArtifact = require("../artifacts/Conference.json");
