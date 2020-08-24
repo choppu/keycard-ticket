@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Keycard Ticket | Participate</title>
-  <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+    rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Alata&display=swap" rel="stylesheet">
 </head>
+
 <body id="participate-page">
-<img  alt="Ticket" id="create-ticket-image" class="kt__image">
-<div class="kt__text-container">
-  <h1 class="kt__heading" id="conference-name"></h1>
-  <input type="text" id="conference-address" class="kt__input kt_ticket-input" placeholder="Conference Address" required>
-  <input type="text" id="attendee-address" class="kt__input kt_ticket-input" placeholder="Attendee Address" required>
-  <div class="kt__buttons-container">
-    <button type="submit" id="participate-get-keycard-address" class="kt__btn" disabled="disabled">Get Keycard Address</button>
-    <button type="submit" id="conference-participate" class="kt__btn" disabled="disabled">Participate</button>
+  <img alt="Ticket" id="create-ticket-image" class="kt__image">
+  <div class="kt__text-container">
+    <h1 class="kt__heading" id="conference-name">Register</h1>
+    <input type="text" id="conference-address" class="kt__input kt_ticket-input" placeholder="Conference Address"
+      required>
+    <input type="text" id="attendee-address" class="kt__input kt_ticket-input" placeholder="Attendee Address" required>
+    <div class="kt__buttons-container">
+      <button type="submit" id="participate-get-keycard-address" class="kt__btn" disabled="disabled">Get Keycard
+        Address</button>
+      <button type="submit" id="conference-participate" class="kt__btn" disabled="disabled">Participate</button>
+    </div>
+    <div class="kt__success-message-container">
+      <span id="ticket-success-message"></span><a id="ticket-ethscan-link" class="kt__success-message-link"></a>
+    </div>
   </div>
-  <div class="kt__success-message-container">
-    <span id="ticket-success-message"></span><a id="ticket-ethscan-link" class="kt__success-message-link"></a>
-  </div>
-</div>
 </body>
+
 </html>

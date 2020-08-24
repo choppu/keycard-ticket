@@ -10,7 +10,6 @@ const WAValidator = require('@swyftx/api-crypto-address-validator');
 
 let provider;
 let signer;
-let contract: any;
 
 function init() : void {
   (window as any).ethereum.enable();
@@ -27,7 +26,7 @@ function init() : void {
   } else if (createTicketPage) {
     createTicket(conferenceArtifact.abi, provider, signer);
   } else if (attendPage) {
-    markAttendance();
+    markAttendance(conferenceArtifact.abi, provider, signer);
   }
 }
 
@@ -49,11 +48,11 @@ function createContract(factory: any) : void {
   });
 
   newConfButton.addEventListener("click", async (e) => {
-    contract = await factory.deploy(confDescription.value);
+    let contract = await factory.deploy(confDescription.value);
     await contract.deployed();
-    let confName = await contract.description();
+    let confName = confDescription.value;
     successContainer.classList.remove("kt__display-none");
-    successMessage.innerHTML = `${confName} has been created successfully`;
+    successMessage.innerHTML = `${confName} has been created`;
     address.innerHTML = `Address: ${contract.address}`;
     e.preventDefault();
   });
@@ -72,7 +71,6 @@ async function createTicket(abi: any, provider: any, signer: any) : Promise<void
   let hash = document.getElementById("ticket-ethscan-link") as HTMLAnchorElement;
   let url = window.location.href;
   let attendeeAddress: string;
-  let conferenceAddress: string;
   let contract: any;
 
   ticketSuccessMessage.innerHTML = "";
@@ -80,20 +78,19 @@ async function createTicket(abi: any, provider: any, signer: any) : Promise<void
   hash.href = "";
 
   if (url.indexOf('#') != - 1) {
-    conferenceAddress = url.slice(url.indexOf('#') + 1);
-    confAddressField.value = conferenceAddress;
-    contract = await updateConferenceAddress(confAddressField.value, conferenceNameField, abi, provider);
-    getKeycardAddressButton.removeAttribute("disabled");
-  } else {
-    conferenceNameField.innerHTML = "Register";
+    let conf = renderConferenceDetails(confAddressField, getKeycardAddressButton, url);
+    contract = await updateConferenceAddress(conf, conferenceNameField, abi, provider, " to ");
   }
 
   ticketContainer.src = ticketImage.default;
   
   confAddressField.addEventListener("input", async (e) => {
     if (WAValidator.validate(confAddressField.value, 'eth')) {
-      contract = await updateConferenceAddress(confAddressField.value, conferenceNameField, abi, provider);
+      contract = await updateConferenceAddress(confAddressField.value, conferenceNameField, abi, provider, " to ");
       getKeycardAddressButton.removeAttribute("disabled");
+    } else {
+      getKeycardAddressButton.setAttribute("disabled", "disabled");
+      conferenceNameField.innerHTML = "Register";
     }
     e.preventDefault();
   });
@@ -126,17 +123,85 @@ async function createTicket(abi: any, provider: any, signer: any) : Promise<void
   });
 }
 
-function markAttendance() : void {
+async function markAttendance(abi: any, provider: any, signer: any) : Promise<void> {
   let attendanceImg =  require("../dapp/img/attendance.png");
   let attendanceImgContainer = document.getElementById("attend-conference-image") as HTMLImageElement;
+  let confAddressField = document.getElementById("attend-conference-address") as HTMLInputElement;
+  let conferenceNameField = document.getElementById("attend-conference-name");
+  let checkTicketBtn = document.getElementById("attend-check-ticket");
+  let attendBtn = document.getElementById("attend-mark-attendance");
+  let attendanceMessage = document.getElementById("attendance-message");
+  let attendanceLink = document.getElementById("attendance-ethscan-link") as HTMLAnchorElement;
+  let url = window.location.href;
+  let keycardData: any;
+  let contract: any;
+
+  if (url.indexOf('#') != - 1) {
+    conferenceNameField.innerHTML = "Attend ";
+    let conf = renderConferenceDetails(confAddressField, checkTicketBtn, url);
+    contract = await updateConferenceAddress(conf, conferenceNameField, abi, provider);
+  }
+
   attendanceImgContainer.src = attendanceImg.default;
+  
+  confAddressField.addEventListener("input", async (e) => {
+    if (WAValidator.validate(confAddressField.value, 'eth')) {
+      conferenceNameField.innerHTML = "Attend ";
+      contract = await updateConferenceAddress(confAddressField.value, conferenceNameField, abi, provider);
+      checkTicketBtn.removeAttribute("disabled");
+    } else {
+      conferenceNameField.innerHTML = "Attend conference";
+      checkTicketBtn.setAttribute("disabled", "disabled");
+      attendBtn.setAttribute("disabled", "disabled");
+    }
+    e.preventDefault();
+  });
+
+  checkTicketBtn.addEventListener("click", async (e) => {
+    attendanceLink.href = "";
+    attendanceLink.innerHTML = "";
+
+    if (contract) {
+      keycardData = await signAttendance(contract, provider);
+      let resp = await contract.tickets(keycardData.keycard);
+      if (resp.exists && !resp.attended) {
+        attendBtn.removeAttribute("disabled");
+        attendanceMessage.innerHTML = "Ticket exists";
+      } else if (resp.exists && resp.attended) {
+        attendanceMessage.innerHTML = "Attendance already registered";
+      } else {
+        attendanceMessage.innerHTML = "Ticket doesn't exist";
+      }
+      e.preventDefault();
+    }
+  });
+
+  attendBtn.addEventListener("click", async (e) => {
+    let resp = await contract.connect(signer).attend({conference: contract.address}, keycardData.signature);
+    attendanceMessage.innerHTML = "Attendance registered";
+    attendanceLink.href = "https://ropsten.etherscan.io/tx/" + resp.hash;
+    attendanceLink.innerHTML = "Check transaction on Etherscan";
+    attendBtn.setAttribute("disabled", "disabled");
+    e.preventDefault();
+  });
 }
 
-async function updateConferenceAddress(conferenceAddress: string, conferenceNameField: HTMLElement, abi: any, provider: any) : Promise<any> {
+async function updateConferenceAddress(conferenceAddress: string, conferenceNameField: HTMLElement, abi: any, provider: any, defaultText = " ") : Promise<any> {
   let conference = new ethers.Contract(conferenceAddress, abi, provider);
   let confName = await conference.description();
-  conferenceNameField.innerHTML = "Register to " + confName;
+  conferenceNameField.innerHTML = conferenceNameField.innerHTML + defaultText + confName;
   return conference;
+}
+
+function renderConferenceDetails(conferenceAddress: HTMLInputElement, btn: HTMLElement, url: string) : string {
+  let confAddress = url.slice(url.indexOf('#') + 1);
+
+  if (WAValidator.validate(confAddress, 'eth')) {
+    conferenceAddress.value = confAddress;
+    btn.removeAttribute("disabled");
+  }
+  
+  return confAddress;
 }
 
 function enableParticipateButton(participateButton: HTMLElement, confVal: string, attendeeVal: string) : void {

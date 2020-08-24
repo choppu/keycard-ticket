@@ -127,10 +127,10 @@ input[disabled="disabled"], input[disabled="disabled"]:hover {
 }
 
 .kt__conference-created-container {
-  background: rgb(72, 63, 87);
-  color: white;
-  padding: 1em 2em;
+  text-align: center;
+  padding: .5em 2em;
   box-sizing: border-box;
+  font-size: .9em;
 }      
 
 .kt__display-none {
@@ -149,7 +149,7 @@ input[disabled="disabled"], input[disabled="disabled"]:hover {
 }
 
 .kt__success-message-container {
-  font-size: .8em;
+  font-size: 1.1em;
   margin-top: 1em auto 0 auto;
   text-align: center;
   line-height: 1.5em;
