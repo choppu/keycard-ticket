@@ -4192,11 +4192,6 @@ ethereumjs-wallet@0.6.3:
     utf8 "^3.0.0"
     uuid "^3.3.2"
 
-ethers-typescript-typings@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/ethers-typescript-typings/-/ethers-typescript-typings-0.0.4.tgz#60b6f9d838504e13755d2d5bbd2e920051cdd401"
-  integrity sha1-YLb52DhQThN1XS1bvS6SAFHN1AE=
-
 ethers@4.0.0-beta.3:
   version "4.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-4.0.0-beta.3.tgz#15bef14e57e94ecbeb7f9b39dd0a4bd435bc9066"
